@@ -1,4 +1,4 @@
-﻿using MainApp.Commands;
+﻿using MainApp.Geometry;
 using Nice3point.Revit.Toolkit.External;
 using Serilog.Events;
 
@@ -22,7 +22,7 @@ namespace MainApp
         {
             var panel = Application.CreatePanel("Panel name", "MainApp");
 
-            var showButton = panel.AddPushButton<Command>("Button text");
+            var showButton = panel.AddPushButton<FormworkCmd>("Button text");
             showButton.SetImage("/MainApp;component/Resources/Icons/RibbonIcon16.png");
             showButton.SetLargeImage("/MainApp;component/Resources/Icons/RibbonIcon32.png");
         }

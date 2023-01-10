@@ -8,7 +8,7 @@ using Nice3point.Revit.Toolkit.External;
 namespace MainApp.Geometry
 {
    [Transaction(TransactionMode.Manual)]
-   internal class GetSideFacesAreaOfColumnCmd : ExternalCommand
+   internal class FormworkCmd : ExternalCommand
    {
       public override void Execute()
       {

@@ -1,0 +1,100 @@
+﻿<Window x:Class="FormworkApp.PilesFromAutocad.View.PileFromCadView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FormworkApp.PilesFromAutocad.View"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
+        Title="PileFromCadView"
+        Name="MainWindow"
+        Width="300">
+    <Grid Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="0">Choose Cad File :</TextBlock>
+
+        <Button Grid.Row="0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Height="26"
+                Command="{Binding PickCommand}"
+                CommandParameter="{Binding ElementName=MainWindow}"
+                Grid.Column="1">Pick Cad</Button>
+
+
+        <TextBlock Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="1">Layer :</TextBlock>
+
+        <ComboBox Grid.Column="1"
+                  ItemsSource="{Binding Layers}"
+                  SelectedItem="{Binding SelectedLayer}"
+                  Grid.Row="1"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Stretch"></ComboBox>
+
+
+        <TextBlock Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="2">Family :</TextBlock>
+
+        <ComboBox Grid.Column="1"
+                  Grid.Row="2"
+                  DisplayMemberPath="Name"
+                  ItemsSource="{Binding PileFamilies}"
+                  SelectedItem="{Binding SelectedFamily}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Stretch"></ComboBox>
+
+
+
+        <TextBlock Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="3">Level :</TextBlock>
+
+        <ComboBox Grid.Column="1"
+                  Grid.Row="3"
+                  DisplayMemberPath="Name"
+                  ItemsSource="{Binding Levels}"
+                  SelectedItem="{Binding SelectedLevel}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Stretch"></ComboBox>
+
+        <StackPanel Grid.Row="4"
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button VerticalAlignment="Center"
+                    Margin="2"
+                    Command="{Binding OkCommand}"
+                    CommandParameter="{Binding ElementName=MainWindow}"
+                    HorizontalAlignment="Center"
+                    Width="68"
+                    Height="26">Ok</Button>
+
+            <Button VerticalAlignment="Center"
+                    Margin="2"
+                    HorizontalAlignment="Center"
+                    Width="68"
+                    Height="26">Close</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,10 @@
+﻿<RevitAddIns>
+    <AddIn Type="Application">
+        <Name>FormworkApp</Name>
+        <Assembly>FormworkApp/FormworkApp.dll</Assembly>
+        <AddInId>3298288C-70BB-47E6-A2B6-E26FC85CC36E</AddInId>
+        <FullClassName>FormworkApp.Application</FullClassName>
+        <VendorId>CompanyName</VendorId>
+        <VendorDescription>Description</VendorDescription>
+    </AddIn>
+</RevitAddIns>

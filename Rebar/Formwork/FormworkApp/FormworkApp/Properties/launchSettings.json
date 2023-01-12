@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "FormworkApp": {
+      "commandName": "Project"
+    },
+    "2020": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Autodesk\\Revit 2020\\Revit.exe"
+    }
+  }
+}

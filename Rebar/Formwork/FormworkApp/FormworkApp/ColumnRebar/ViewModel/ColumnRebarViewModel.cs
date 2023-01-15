@@ -87,11 +87,6 @@ namespace FormworkApp.ColumnRebar.ViewModel
          //rebar.GetShapeDrivenAccessor().SetRebarShapeId(stirrupShape.Id);
          if (null != rebar)
          {
-            // set specific layout for new rebar as fixed number, with 10 bars, distribution path length of 1.5'
-            // with bars of the bar set on the same side of the rebar plane as indicated by normal
-            // and both first and last bar in the set are shown
-
-
             var z1 = ColumnModel.BaseElevation + 50.0.MmToFoot();
             var z4 = ColumnModel.TopElevation - 50.0.MmToFoot();
             var length = (z4 - z1) / 3.0;
@@ -109,10 +104,7 @@ namespace FormworkApp.ColumnRebar.ViewModel
             rebar23.IncludeFirstBar = false;
             rebar23.IncludeLastBar = false;
 
-
             rebar34.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(StirrupSpacing, length, true, true, true);
-
-
          }
       }
    }

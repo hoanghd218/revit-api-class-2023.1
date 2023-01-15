@@ -16,6 +16,11 @@
 
       }
 
+      public static double FootToMm(this double feet)
+      {
+         return feet * 304.79999999999995;
+      }
+
 
       public static double MmToFoot(this double number1)
       {

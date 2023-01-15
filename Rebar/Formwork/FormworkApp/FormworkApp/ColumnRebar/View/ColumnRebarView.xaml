@@ -4,11 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FormworkApp.ColumnRebar.View"
+        xmlns:converters="clr-namespace:FormworkApp.ColumnRebar.Converters"
         mc:Ignorable="d"
         Name="MainWindow"
         SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         Width="300">
+    <FrameworkElement.Resources>
+        <converters:FeetToIntString x:Key="FeetToIntString" />
+    </FrameworkElement.Resources>
     <Grid Margin="2">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
@@ -82,7 +86,7 @@
                    Grid.Row="5">Spacing 2:</TextBlock>
 
         <TextBox Height="25"
-                 Text="{Binding Cover}"
+                 Text="{Binding Cover,Converter={StaticResource FeetToIntString}}"
                  Grid.Column="1"
                  Grid.Row="3"
                  VerticalAlignment="Center"></TextBox>
@@ -90,13 +94,13 @@
         <TextBox Height="25"
                  Grid.Column="1"
                  Grid.Row="4"
-                 Text="{Binding StirrupSpacing}"
+                 Text="{Binding StirrupSpacing,Converter={StaticResource FeetToIntString}}"
                  VerticalAlignment="Center"></TextBox>
 
         <TextBox Height="25"
                  Grid.Column="1"
                  Grid.Row="5"
-                 Text="{Binding StirrupSpacing2}"
+                 Text="{Binding StirrupSpacing2,Converter={StaticResource FeetToIntString}}"
                  VerticalAlignment="Center"></TextBox>
 
 

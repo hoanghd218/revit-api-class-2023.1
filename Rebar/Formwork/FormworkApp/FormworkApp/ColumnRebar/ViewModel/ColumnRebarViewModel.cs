@@ -52,6 +52,7 @@ namespace FormworkApp.ColumnRebar.ViewModel
          {
             window.Close();
             CreateStirrup();
+            CreateRebar();
 
          }
       }
@@ -76,15 +77,9 @@ namespace FormworkApp.ColumnRebar.ViewModel
             a1b1,b1c1,c1d1,d1a1
          };
 
-         //curves.ForEach(x =>
-         //{
-         //   var sk = SketchPlane.Create(Document, Plane.CreateByNormalAndOrigin(XYZ.BasisZ, a1));
-         //   Document.Create.NewModelCurve(x, sk);
-         //});
 
          var rebar = Rebar.CreateFromCurves(Document, RebarStyle.StirrupTie, StirrupDiameter, null, null, ColumnModel.Column, XYZ.BasisZ, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
 
-         //rebar.GetShapeDrivenAccessor().SetRebarShapeId(stirrupShape.Id);
          if (null != rebar)
          {
             var z1 = ColumnModel.BaseElevation + 50.0.MmToFoot();
@@ -106,6 +101,35 @@ namespace FormworkApp.ColumnRebar.ViewModel
 
             rebar34.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(StirrupSpacing, length, true, true, true);
          }
+      }
+
+
+      Rebar CreateRebar()
+      {
+         IList<Curve> curves = new List<Curve>();
+
+         var columnModel = new ColumnModel(ColumnModel.Column);
+         var height = columnModel.TopElevation - columnModel.BaseElevation;
+
+         var p = columnModel.A.Add(columnModel.RightVector * (MainDiameter.BarModelDiameter * 0.5 + Cover))
+               .Add(columnModel.UpVector * -(MainDiameter.BarModelDiameter * 0.5 + Cover))
+            ;
+
+         curves.Add(Line.CreateBound(p, p.Add(XYZ.BasisZ * height)));
+
+         Rebar rebar = Rebar.CreateFromCurves(Document, RebarStyle.Standard, MainDiameter, null, null,
+            columnModel.Column, columnModel.RightVector, curves, RebarHookOrientation.Right, RebarHookOrientation.Left, true, true);
+
+         if (null != rebar)
+         {
+            rebar.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(NoRebarX, columnModel.SectionWidth - Cover * 2 - MainDiameter.BarNominalDiameter, true, true, true);
+
+
+            var distance = columnModel.A.DistanceTo(columnModel.D) - 2 * Cover - MainDiameter.BarModelDiameter;
+            ElementTransformUtils.CopyElement(Document, rebar.Id, distance * columnModel.UpVector * -1);
+         }
+
+         return rebar;
       }
    }
 }

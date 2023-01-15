@@ -2,6 +2,7 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI.Selection;
+using BimAppUtils.DoubleUtils;
 using BimAppUtils.GeometryUtils;
 using BimAppUtils.XYZUtils;
 using FormworkApp.ColumnRebar.View;
@@ -17,27 +18,40 @@ namespace FormworkApp.ColumnRebar
       public override void Execute()
       {
 
-         var floorRf = UiDocument.Selection.PickObject(ObjectType.Element, "Select floor");
-         var floor = Document.GetElement(floorRf);
-         var p1 = UiDocument.Selection.PickPoint("p1");
-         var p2 = UiDocument.Selection.PickPoint("p1");
+         var wallrf = UiDocument.Selection.PickObject(ObjectType.Element, "Select wall");
+         var wall = Document.GetElement(wallrf);
+
 
          var rbt = Document.GetElement(Document.GetDefaultElementTypeId(ElementTypeGroup.RebarBarType)) as RebarBarType;
 
-         var hooks = new FilteredElementCollector(Document).OfClass(typeof(RebarHookType)).Cast<RebarHookType>()
-            .ToList();
-         var hook90 = hooks.FirstOrDefault(x => x.Name.Contains("90"));
 
-     
+         var curve = (wall.Location as LocationCurve).Curve;
+         var cl = new CurveLoop();
+
+         cl.Append(curve);
+         var newCl = CurveLoop.CreateViaOffset(cl, 70.MmToFoot(), XYZ.BasisZ);
+         var newCl2 = CurveLoop.CreateViaOffset(cl, 70.MmToFoot(), -XYZ.BasisZ);
          using (var t = new Transaction(Document, "Create Rebar"))
          {
             t.Start();
-            var curves = new List<Curve>() { Line.CreateBound(p1, p2) };
-            var normal = XYZ.BasisZ.CrossProduct(p1 - p2);
-            var rebar=Rebar.CreateFromCurves(Document, RebarStyle.Standard, rbt, hook90, hook90, floor, normal, curves,
-               RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
 
-            rebar.GetShapeDrivenAccessor().SetLayoutAsFixedNumber(2,3/12.0,false,true,true);
+
+            {
+               var curves = new List<Curve>(newCl.ToList());
+               var normal = XYZ.BasisZ;
+               var rebar = Rebar.CreateFromCurves(Document, RebarStyle.Standard, rbt, null, null, wall, normal, curves,
+                  RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            }
+
+            {
+               var curves = new List<Curve>(newCl2.ToList());
+               var normal = XYZ.BasisZ;
+               var rebar = Rebar.CreateFromCurves(Document, RebarStyle.Standard, rbt, null, null, wall, normal, curves,
+                  RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
+            }
+
+
+
             t.Commit();
          }
       }

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
+using BimAppUtils.DoubleUtils;
 using BimAppUtils.WPFUtils;
 using FormworkApp.ColumnRebar.Model;
 
@@ -14,12 +15,15 @@ namespace FormworkApp.ColumnRebar.ViewModel
       public int NoRebarX { get; set; } = 2;
       public int NoRebarY { get; set; } = 2;
 
-      public double StirrupSpacing { get; set; } = 0.656167979;
+      public double StirrupSpacing { get; set; } = 100 * 0.003280839895;
+      public double StirrupSpacing2 { get; set; } = 200 * 0.003280839895;
       public double Cover { get; set; } = 0.098425;
       public ColumnModel ColumnModel { get; set; }
 
       public Document Document { get; set; }
       public RelayCommand OkCommand { get; set; }
+
+      private RebarShape stirrupShape = null;
 
       public ColumnRebarViewModel(Document doc, FamilyInstance column)
       {
@@ -34,6 +38,8 @@ namespace FormworkApp.ColumnRebar.ViewModel
 
 #endif
 
+         stirrupShape = new FilteredElementCollector(Document).OfClass(typeof(RebarShape)).Cast<RebarShape>()
+            .FirstOrDefault(x => x.Name == "BS_M_T1");
 
          MainDiameter = Diameters.LastOrDefault();
          StirrupDiameter = Diameters.FirstOrDefault();
@@ -70,22 +76,43 @@ namespace FormworkApp.ColumnRebar.ViewModel
             a1b1,b1c1,c1d1,d1a1
          };
 
-         curves.ForEach(x =>
-         {
-            var sk = SketchPlane.Create(Document, Plane.CreateByNormalAndOrigin(XYZ.BasisZ, a1));
-            Document.Create.NewModelCurve(x, sk);
-         });
+         //curves.ForEach(x =>
+         //{
+         //   var sk = SketchPlane.Create(Document, Plane.CreateByNormalAndOrigin(XYZ.BasisZ, a1));
+         //   Document.Create.NewModelCurve(x, sk);
+         //});
 
          var rebar = Rebar.CreateFromCurves(Document, RebarStyle.StirrupTie, StirrupDiameter, null, null, ColumnModel.Column, XYZ.BasisZ, curves, RebarHookOrientation.Left, RebarHookOrientation.Left, true, true);
 
+         //rebar.GetShapeDrivenAccessor().SetRebarShapeId(stirrupShape.Id);
          if (null != rebar)
          {
             // set specific layout for new rebar as fixed number, with 10 bars, distribution path length of 1.5'
             // with bars of the bar set on the same side of the rebar plane as indicated by normal
             // and both first and last bar in the set are shown
 
-            var arrayLength = ColumnModel.TopElevation - ColumnModel.BaseElevation - 2 * Cover;
-            rebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(StirrupSpacing, arrayLength, true, true, true);
+
+            var z1 = ColumnModel.BaseElevation + 50.0.MmToFoot();
+            var z4 = ColumnModel.TopElevation - 50.0.MmToFoot();
+            var length = (z4 - z1) / 3.0;
+            var z2 = z1 + length;
+            var z3 = z2 + length;
+
+            var rebar23 = Document.GetElement(ElementTransformUtils.CopyElement(Document, rebar.Id, XYZ.BasisZ * length).FirstOrDefault()) as Rebar;
+            var rebar34 = Document.GetElement(ElementTransformUtils.CopyElement(Document, rebar.Id, XYZ.BasisZ * length * 2).FirstOrDefault()) as Rebar;
+            Document.Regenerate();
+            ;
+            rebar.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(StirrupSpacing, length, true, true, true);
+
+
+            rebar23.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(StirrupSpacing2, length, true, false, false);
+            rebar23.IncludeFirstBar = false;
+            rebar23.IncludeLastBar = false;
+
+
+            rebar34.GetShapeDrivenAccessor().SetLayoutAsMaximumSpacing(StirrupSpacing, length, true, true, true);
+
+
          }
       }
    }

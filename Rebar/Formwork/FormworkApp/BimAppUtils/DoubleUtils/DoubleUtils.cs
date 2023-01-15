@@ -15,5 +15,18 @@
          return false;
 
       }
+
+
+      public static double MmToFoot(this double number1)
+      {
+         return number1 * 0.003280839895;
+
+      }
+
+      public static double MmToFoot(this int number1)
+      {
+         return number1 * 0.003280839895;
+
+      }
    }
 }

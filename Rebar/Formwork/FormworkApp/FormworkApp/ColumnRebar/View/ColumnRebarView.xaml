@@ -18,6 +18,7 @@
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"></ColumnDefinition>
@@ -73,7 +74,12 @@
         <TextBlock Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   Grid.Row="4">Spacing :</TextBlock>
+                   Grid.Row="4">Spacing 1:</TextBlock>
+
+        <TextBlock Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Grid.Row="5">Spacing 2:</TextBlock>
 
         <TextBox Height="25"
                  Text="{Binding Cover}"
@@ -87,14 +93,21 @@
                  Text="{Binding StirrupSpacing}"
                  VerticalAlignment="Center"></TextBox>
 
+        <TextBox Height="25"
+                 Grid.Column="1"
+                 Grid.Row="5"
+                 Text="{Binding StirrupSpacing2}"
+                 VerticalAlignment="Center"></TextBox>
+
+
 
         <TextBlock Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   Grid.Row="5">Stirrup Diameter:</TextBlock>
+                   Grid.Row="6">Stirrup Diameter:</TextBlock>
 
         <ComboBox Grid.Column="1"
-                  Grid.Row="5"
+                  Grid.Row="6"
                   DisplayMemberPath="Name"
                   ItemsSource="{Binding Diameters}"
                   SelectedItem="{Binding StirrupDiameter}"
@@ -102,7 +115,7 @@
                   HorizontalAlignment="Stretch"></ComboBox>
 
 
-        <StackPanel Grid.Row="6"
+        <StackPanel Grid.Row="7"
                     Grid.Column="1"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
